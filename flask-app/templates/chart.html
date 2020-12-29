@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>chart</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript">
+   var file_data1 = {{file|tojson}};
+   var stat = {{status|tojson}};
+   var admin = {{admin|tojson}};
+   var date = {{date|tojson}};
+   var min_date= {{min_date|tojson}};
+ </script>
+ <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+ <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+ <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+ <script type=text/javascript src={{  url_for('static', filename='js/chart.js') }}></script>
+ <script type=text/javascript src={{  url_for('static', filename='js/base.js') }}></script>
+ <link rel="stylesheet" type="text/css" href={{  url_for('static', filename='css/base.css') }}>   
+ <link rel="icon" type="image/png" href="{{url_for('static',filename='pic/icon_pic.ico')}}">
+</head>
+
+<body background ={{url_for('static',filename='pic/bg_pic.png')}}>
+
+  <span id="timeline" style="height:300px;width:100%;display: inline-block;"></span>
+  <div>
+    <form method="POST" id="date-picker">
+      <input type="text" id="datepicker" name="date" onchange="submit()">
+    </form>
+    <span style="float: right;display: inline;"><a href={{ url_for('logout') }}  style="text-decoration:none;"><img float: right;" src="{{url_for('static',filename='pic/logout_pic.png')}}"><b style="display: block;color:#808080;">Logout</b></span></a></div>
+
+    <span style="margin-left: 300px;">
+     <table id="table" class="table" style="display: inline-block;">
+      <tr>
+        <th class="th">User</th>
+        <th class="th">Presence</th>
+      </tr>
+      <tr id="usr0">
+        <td class="td">User_0</td>
+        <td class="td"></td>
+      </tr>
+      <tr id="usr1">
+        <td class="td">User_1</td>
+        <td class="td"></td>
+      </tr>
+      <tr id="usr2">
+        <td class="td">User_2</td>
+        <td class="td"></td>
+      </tr>
+      <tr id="usr3">
+        <td class="td">User_3</td>
+        <td class="td"></td>
+      </tr>
+    </table>
+  </span>
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {%for category,message in messages%}
+  <div class={{category}}>{{message}}
+    <span class="closebtn" onclick="var alert=this.parentElement;alert.style.opacity='0';
+    setTimeout(function(){ alert.style.display ='none'; }, 600);">&times;</span>
+  </div>
+  {%endfor%}
+  {% endif %}
+  {% endwith %}
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href={{  url_for('static', filename='css/login-page.css') }}>
+  <link rel="icon" type="image/png" href={{url_for('static',filename='pic/login_pic.png')}}>
+  <link rel="stylesheet" type="text/css" href={{  url_for('static', filename='css/base.css') }}>  
+</head>
+
+<body>
+  <main id="main-holder">
+    <h1 id="login-header">Login <img src="{{url_for('static',filename='pic/login_pic.png')}}"></h1>
+    <form id="login-form" style="display:block;" method="POST"name="login" >
+      <label>User Type :</label>
+      <select name="user_type" id="username-field" class="login-form-field">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+      <input type="password" name="psswd" id="password-field" class="login-form-field" placeholder="Password">
+      <input type="submit" value="Login" id="login-form-submit">
+    </form>
+  </main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {%for category,message in messages%}
+  <div class={{category}}>{{message}}
+    <span class="closebtn" onclick="var alert=this.parentElement;alert.style.opacity='0';
+    setTimeout(function(){ alert.style.display ='none'; }, 600);">&times;</span>
+  </div>
+  {%endfor%}
+  {% endif %}
+  {% endwith %}
+</body>
+
+</html>
