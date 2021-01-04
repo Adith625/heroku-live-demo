@@ -15,3 +15,4 @@ coll=db[month]
 data={"_id":int(day),"user_0":[],"user_1":[],"user_2":[],"user_3":[]}
 coll.delete_one({"_id":int(day)})
 coll.insert_one(data)
+print(month)

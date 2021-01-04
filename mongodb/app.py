@@ -4,6 +4,7 @@ import datetime
 import time
 import pymongo
 from pymongo import MongoClient
+import mod
 with open("/home/mint/Desktop/python/API_KEYS.json") as api_keys:
   api_keys=api_keys.read()
 api_keys=json.loads(api_keys)
@@ -25,9 +26,9 @@ def exit(tag):
   user="user_" +tag
   data = {"exit_time":exit_time}
   doc = coll.find_one({"_id":day})
-  length = len(doc[user])
-  length = length-1
-  doc[user][length].update(data)
+  len_ = len(doc[user])
+  len_ = len_-1
+  doc[user][len_].update(data)
   coll.update_one({"_id":day},{"$set":doc})
 
 def enter(tag):
@@ -44,12 +45,12 @@ def tag_detected(tag):
   temp_date = datetime.datetime.now()
   new_day(temp_date)
   doc = coll.find_one({"_id":day})
-  length=len(doc["user_"+tag])
-  if(length==0):
+  len_=len(doc["user_"+tag])
+  if(len_==0):
    enter(tag)
    return
-  length=length-1
-  presence=len(doc["user_"+str(tag)][length])
+  len_=len_-1
+  presence=len(doc["user_"+str(tag)][len_])
   if(presence==2):
    enter(tag)
   elif(presence==1):

@@ -6,6 +6,7 @@ import pymongo
 from pymongo import MongoClient
 with open("/home/mint/Desktop/python/API_KEYS.json") as api_keys:
   api_keys=api_keys.read()
+api_keys=json.loads(api_keys)
 server=pymongo.MongoClient(api_keys["mongodb"])
 date= datetime.datetime.now()
 db=server[date.strftime("%Y")]
@@ -56,9 +57,9 @@ def chart():
   return redirect(url_for('login'))
  date_temp=datetime.datetime.now()
  colls=db.list_collection_names()
- colls = list(map(int,colls))
- min_month=min(colls)
- min_month=str(min_month)
+ colls = list(map(str,colls))
+ min_month=sorted(colls)
+ min_month=str(min_month[0])
  min_month=db[min_month]
  min_day= min_month.aggregate(
    [
