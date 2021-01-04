@@ -3,7 +3,7 @@ import random
 import datetime
 import pymongo
 from pymongo import MongoClient
-with open("/home/mint/Desktop/python/API_KEYS.json") as api_keys:
+with open("../API_KEYS.json") as api_keys:
   api_keys=api_keys.read()
 api_keys=json.loads(api_keys)
 server=pymongo.MongoClient(api_keys["mongodb"])

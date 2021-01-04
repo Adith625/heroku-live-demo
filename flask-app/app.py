@@ -4,7 +4,7 @@ import secrets
 import datetime
 import pymongo
 from pymongo import MongoClient
-with open("/home/mint/Desktop/python/API_KEYS.json") as api_keys:
+with open("../API_KEYS.json") as api_keys:
   api_keys=api_keys.read()
 api_keys=json.loads(api_keys)
 server=pymongo.MongoClient(api_keys["mongodb"])
@@ -73,7 +73,6 @@ def chart():
      
    ]
   );
- # min_day=min_month.find_one({})
  min_day=list(min_day)
  min_day=min_day[0]["min_day"]
  n=int(date_temp.strftime("%j"))-int(min_day)
