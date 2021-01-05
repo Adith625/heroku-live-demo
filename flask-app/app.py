@@ -56,11 +56,16 @@ def chart():
   flash("please login","alert")
   return redirect(url_for('login'))
  date_temp=datetime.datetime.now()
- colls=db.list_collection_names()
+ dbs=[]
+ for yr in server.list_database_names():
+  if yr.isdigit():
+    dbs.append(int(yr))
+ dbs=min(dbs)
+ colls=server[str(dbs)].list_collection_names()
  colls = list(map(str,colls))
  min_month=sorted(colls)
  min_month=str(min_month[0])
- min_month=db[min_month]
+ min_month=server[str(dbs)][min_month]
  min_day= min_month.aggregate(
    [
      {
@@ -76,18 +81,22 @@ def chart():
  min_day=list(min_day)
  min_day=min_day[0]["min_day"]
  n=int(date_temp.strftime("%j"))-int(min_day)
+ for yrs in range(int(date_temp.strftime("%Y"))-dbs):
+  n=n+365
+  if int(datetime.date(int(dbs+yrs),3,1).strftime("%j"))!=60:
+    n=n+1
  global coll
  if request.method=="POST":
   v=request.form["date"]
   z=v.split("/")
   y=datetime.datetime(int(z[2]),int(z[0]),int(z[1]))
   y= y.strftime("%j")
-  print(y)
+  db=server[z[2]]
   coll=db[z[0]]
   if date_temp.strftime("%j")==y: #is same date is chosen
    return redirect(url_for('chart'))
   file_data=coll.find_one({"_id":int(y)})
-  if file_data is None:
+  if (file_data is None or file_data=={"_id":int(y),"user_0":[],"user_1":[],"user_2":[],"user_3":[]}):
    # return f"data not present <a href='/chart'>goback</a>"
    flash('Data not present','alert')
    return redirect(url_for("chart"))
@@ -103,7 +112,8 @@ def chart():
   f=-1
   file_data=json.dumps(file_data)
   return render_template('chart.html',file=file_data,status=f,min_date=n,date=v,admin=admin)
- else:                #GET
+ else:                                  #GET
+  db=server[date_temp.strftime("%Y")]
   h=date_temp.strftime("%m")
   coll=db[h]
   file_data=coll.find_one({"_id":int(date_temp.strftime("%j"))})

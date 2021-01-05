@@ -8,9 +8,12 @@ with open("../API_KEYS.json") as api_keys:
 api_keys=json.loads(api_keys)
 server=pymongo.MongoClient(api_keys["mongodb"])
 date_temp = datetime.datetime.now()
-day = date_temp.strftime("%j")
-month=date_temp.strftime("%m")
-year=date_temp.strftime("%Y")
+print("enter day")
+day =str(input())
+print("enter month")
+month=str(input())
+print("enter yr")
+year=str(input())
 db = server[year]
 coll=db[month]
 file_data={"_id":int(day),"user_0":[],"user_1":[],"user_2":[],"user_3":[]}
