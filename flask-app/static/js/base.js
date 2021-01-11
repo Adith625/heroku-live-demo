@@ -13,7 +13,7 @@ $( function() {
  } );
  
 
- if (stat!=-1 && admin==true) {
+ if (stat!=-1) {
    stat=JSON.parse(stat);
    var g;
    var a;

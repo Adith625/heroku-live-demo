@@ -29,7 +29,7 @@ def login():
    psswd= request.form["psswd"]
    if user=="admin" and psswd=="admin_psswd" or user=="user" and psswd=="user_psswd":
      session["user_type"]=user
-     flash("Login successful","info")
+     flash(user+" login successful","info")
      return redirect(url_for('chart'))
    else:
     flash("Incorect password","alert")
