@@ -3,9 +3,9 @@ import json
 import datetime
 import time
 import pymongo
-import mod
 
-with open("../API_KEYS.json") as api_keys:
+
+with open("./API_KEYS.json") as api_keys:
     api_keys = api_keys.read()
 api_keys = json.loads(api_keys)
 server = pymongo.MongoClient(api_keys["mongodb"])
@@ -19,13 +19,15 @@ year = date_temp.strftime("%Y")
 db = server[year]
 coll = db[month]
 day = int(day)
+if coll.find_one({"_id": int(day)}) is None:
+    coll.insert_one({"_id": int(day), "user_0": [], "user_1": [], "user_2": [], "user_3": []})
 
 
-def exit(tag):
-    print("user_" + tag + " has exited")
+def user_exit(tag_id):
+    print("user_" + tag_id + " has exited")
     temp = datetime.datetime.now()
     exit_time = {"hr": temp.strftime("%H"), "min": temp.strftime("%M")}
-    user = "user_" + tag
+    user = "user_" + tag_id
     data = {"exit_time": exit_time}
     doc = coll.find_one({"_id": day})
     len_ = len(doc[user])
@@ -34,31 +36,31 @@ def exit(tag):
     coll.update_one({"_id": day}, {"$set": doc})
 
 
-def enter(tag):
-    print("user_" + tag + " has entered")
+def user_enter(tag_id):
+    print("user_" + tag_id + " has entered")
     temp = datetime.datetime.now()
     enter_time = {"hr": temp.strftime("%H"), "min": temp.strftime("%M")}
-    user = "user_" + tag
+    user = "user_" + tag_id
     data = {"enter_time": enter_time}
     doc = coll.find_one({"_id": day})
     doc[user].append(data)
     coll.update_one({"_id": day}, {"$set": doc})
 
 
-def tag_detected(tag):
+def tag_detected(tag_id):
     temp_date = datetime.datetime.now()
     new_day(temp_date)
     doc = coll.find_one({"_id": day})
-    len_ = len(doc["user_" + tag])
+    len_ = len(doc["user_" + tag_id])
     if len_ == 0:
-        enter(tag)
+        user_enter(tag_id)
         return
     len_ = len_ - 1
-    presence = len(doc["user_" + str(tag)][len_])
+    presence = len(doc["user_" + str(tag_id)][len_])
     if presence == 2:
-        enter(tag)
+        user_enter(tag_id)
     elif presence == 1:
-        exit(tag)
+        user_exit(tag_id)
 
 
 def add_exit(i):
