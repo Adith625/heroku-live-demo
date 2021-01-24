@@ -3,15 +3,13 @@ import json
 import datetime
 import time
 import pymongo
-
-
-with open("./API_KEYS.json") as api_keys:
-    api_keys = api_keys.read()
-api_keys = json.loads(api_keys)
-server = pymongo.MongoClient(api_keys["mongodb"])
-bolt_api = api_keys["bolt"]["bolt_api"]
-device_id = api_keys["bolt"]["device_id"]
-bolt = Bolt(bolt_api, device_id)
+from environs import Env
+env = Env()
+env.read_env()
+server = pymongo.MongoClient(env.str("MongoDB"))
+Bolt_Api = env.str("Bolt_Api")
+Device_Id = env.str("Device_Id")
+bolt = Bolt(Bolt_Api, Device_Id)
 date_temp = datetime.datetime.now()
 day = date_temp.strftime("%j")
 month = date_temp.strftime("%m")

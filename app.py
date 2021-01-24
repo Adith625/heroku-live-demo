@@ -1,17 +1,17 @@
 import datetime
 import json
-import secrets
 import pymongo
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-with open("./API_KEYS.json") as api_keys:
-    api_keys = api_keys.read()
-api_keys = json.loads(api_keys)
-server = pymongo.MongoClient(api_keys["mongodb"])
+from environs import Env
+env = Env()
+env.read_env() 
+server = pymongo.MongoClient(env.str("MongoDB"))
 date = datetime.datetime.now()
 db = server[date.strftime("%Y")]
 coll = db[date.strftime("%m")]
 app = Flask(__name__)
-app.secret_key = secrets.token_urlsafe(16)
+app.secret_key = env.str("Secret_Key")
+debug = env.bool("Debug")
 
 
 @app.route('/')
@@ -24,7 +24,6 @@ def home():
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
-    # session["user_type"]="user"
     if "user_type" in session:
         return redirect(url_for('chart'))
     if request.method == "POST":
@@ -81,7 +80,7 @@ def chart():
             }
 
         ]
-    );
+    )
     min_day = list(min_day)
     min_day = min_day[0]["min_day"]
     n = int(date_temp.strftime("%j")) - int(min_day)
@@ -98,11 +97,10 @@ def chart():
         y = y.strftime("%j")
         db = server[z[2]]
         coll = db[z[0]]
-        if date_temp.strftime("%j") == y:  # is same date is chosen
+        if date_temp.strftime("%j") == y:
             return redirect(url_for('chart'))
         file_data = coll.find_one({"_id": int(y)})
         if file_data is None or file_data == {"_id": int(y), "user_0": [], "user_1": [], "user_2": [], "user_3": []}:
-            # return f"data not present <a href='/chart'>go back</a>"
             flash('Data not present', 'alert')
             return redirect(url_for("chart"))
         for i in range(4):
@@ -117,7 +115,7 @@ def chart():
         f = -1
         file_data = json.dumps(file_data)
         return render_template('chart.html', file=file_data, status=f, min_date=n, date=v, admin=admin)
-    else:  # GET
+    else:
         db = server[date_temp.strftime("%Y")]
         h = date_temp.strftime("%m")
         coll = db[h]
@@ -172,4 +170,4 @@ def add_exit1(tag, file_data):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=debug)
