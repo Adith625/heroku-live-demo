@@ -33,8 +33,8 @@ void loop() {
 
   Serial.print(F("Card UID:"));    //Dump UID
   for (byte i = 0; i < mfrc522.uid.size; i++) {
-    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
     Serial.print(mfrc522.uid.uidByte[i], HEX);
+    Serial.print(i < 4 ? "," : "!");
   }
 
   byte buffer[16]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};    //define default password

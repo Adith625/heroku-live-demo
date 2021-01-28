@@ -11,14 +11,14 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);               // Create MFRC522 instance
 bool verify();                                 //define functions
 void set_password();
 
-char password[4][16] = {
+byte password[4][16] = {
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},       //list of defalut passwords
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
 };
 
-char uid[4][4] ={
+byte uid[4][4] ={
 {105,44,44,1},                                 //2D array of UIDs of tags
 {231,101,52,38},
 {73,214,42,164},
@@ -56,9 +56,9 @@ void loop() {
     return;
   }
 
-  int current_uid[4];
+  byte current_uid[4];
   for (byte i = 0; i < mfrc522.uid.size; i++) {
-    current_uid[i]=(char)(mfrc522.uid.uidByte[i]);
+    current_uid[i]= mfrc522.uid.uidByte[i];
   }
 
   int val=0;
@@ -128,7 +128,7 @@ bool verify() {
 void set_password() {
   byte write_buffer[16];
   for (int i = 0; i < 16; i++) {
-    write_buffer[i] = (char)(random(31, 126)); //genarate random number and convert it into character
+    write_buffer[i] = random(31, 126); //genarate random number and convert it into character
     password[tag_id][i] = write_buffer[i];    //store new password
   }
 
