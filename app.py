@@ -1,6 +1,7 @@
 import datetime
 import json
 import pymongo
+import random
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from environs import Env
 env = Env()
@@ -39,6 +40,29 @@ def login():
     else:
         return render_template("login.html")
 
+def random_data(day, month, year):
+ db = server[year]
+ coll=db[month]
+ file_data={"_id":int(day),"user_0":[],"user_1":[],"user_2":[],"user_3":[]}
+ for i in range(4):       #for 4 users
+     usr="user_"+str(i)
+     a=random.randint(0,5) #number of entries
+     for b in range(a):    #for each entry
+       hr=random.randint(0,23)
+       min=random.randint(0,59)
+       enter_time = {"hr":str(hr),"min":str(min)}
+       hr=random.randint(hr,23)
+       if (hr==int(enter_time["hr"])):
+         min=random.randint(min,59)
+         if(min==int(enter_time["min"])):
+           min=min+random.randint(1,59-min)
+       else:
+         min=random.randint(0,59)
+       exit_time = {"hr":str(hr),"min":str(min)}
+       data = {"enter_time":enter_time,"exit_time":exit_time}
+       file_data[usr].append(data)
+ coll.delete_one({"_id":int(day)})
+ coll.insert_one(file_data) 
 
 @app.route("/logout")
 def logout():
@@ -101,8 +125,9 @@ def chart():
             return redirect(url_for('chart'))
         file_data = coll.find_one({"_id": int(y)})
         if file_data is None or file_data == {"_id": int(y), "user_0": [], "user_1": [], "user_2": [], "user_3": []}:
-            flash('Data not present', 'alert')
-            return redirect(url_for("chart"))
+           random_data(y, z[0], z[2])
+           flash("Generating Random data", "info")
+           return redirect(url_for("chart"))
         for i in range(4):
             usr = "user_" + str(i)
             b = len(file_data[usr])
@@ -120,9 +145,9 @@ def chart():
         h = date_temp.strftime("%m")
         coll = db[h]
         file_data = coll.find_one({"_id": int(date_temp.strftime("%j"))})
-        if file_data is None:
-            flash('Data not present', 'alert')
-            return redirect(url_for("logout"))
+        if file_data is None or file_data == {"_id": int(date_temp.strftime("%j")), "user_0": [], "user_1": [], "user_2": [], "user_3": []}:
+           random_data(date_temp.strftime("%j"), date_temp.strftime("%m"), date_temp.strftime("%Y"))
+           return redirect(url_for("chart"))
         f = {}
         for i in range(4):
             usr = "user_" + str(i)
