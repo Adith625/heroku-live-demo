@@ -30,9 +30,6 @@
       <input type="text" id="datepicker" name="date" onchange="submit()">
     </form>
     <span style="float: right;display: inline;"><a href={{ url_for('logout') }}  style="text-decoration:none;"><img float: right;" src="{{url_for('static',filename='pic/logout_pic.png')}}"><b style="display: block;color:#808080;">Logout</b>
-       <a href="https://www.github.com/Adith625" target="_blank">
-        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">
-      </a>
     </span></a></div>
 
     <span style="margin-left: 300px;">
@@ -58,7 +55,9 @@
         <td class="td"></td>
       </tr>
     </table>
-  </span>
+  </span>   <span style="border-left:  50%;display: inline-block;"> <a href="https://www.github.com/Adith625" target="_blank">
+        <img style="height: 200px;width: 200px" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png">
+      </a></span>
   
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
