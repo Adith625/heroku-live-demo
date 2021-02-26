@@ -17,28 +17,25 @@ debug = env.bool("Debug")
 
 @app.route('/')
 def home():
-    if "user_type" in session:
-        return redirect(url_for('chart'))
-    else:
-        return redirect(url_for('login'))
+    return redirect(url_for('chart'))
 
 
-@app.route('/login', methods=["POST", "GET"])
-def login():
-    if "user_type" in session:
-        return redirect(url_for('chart'))
-    if request.method == "POST":
-        user = request.form.get("user_type")
-        psswd = request.form["psswd"]
-        if user == "admin" and psswd == "admin" or user == "user" and psswd == "user":
-            session["user_type"] = user
-            flash(user + " login successful", "info")
-            return redirect(url_for('chart'))
-        else:
-            flash("Incorrect password", "alert")
-            return redirect(url_for('login'))
-    else:
-        return render_template("login.html")
+# @app.route('/login', methods=["POST", "GET"])
+# def login():
+#     if "user_type" in session:
+#         return redirect(url_for('chart'))
+#     if request.method == "POST":
+#         user = request.form.get("user_type")
+#         psswd = request.form["psswd"]
+#         if user == "admin" and psswd == "admin" or user == "user" and psswd == "user":
+#             session["user_type"] = user
+#             flash(user + " login successful", "info")
+#             return redirect(url_for('chart'))
+#         else:
+#             flash("Incorrect password", "alert")
+#             return redirect(url_for('login'))
+#     else:
+#         return render_template("login.html")
 
 def random_data():
  file_data={"_id":int(date.strftime("%j")),"user_0":[],"user_1":[],"user_2":[],"user_3":[]}
@@ -68,24 +65,25 @@ def random_data():
     data = {"enter_time":enter_time,"exit_time":exit_time}
     file_data[usr].append({"enter_time":enter_time,"exit_time":exit_time})
  return file_data
-@app.route("/logout")
-def logout():
-    if "user_type" in session:
-        session.pop("user_type", None)
-        flash("Logout successful", "info")
-    return redirect(url_for('login'))
+# @app.route("/logout")
+# def logout():
+#     if "user_type" in session:
+#         session.pop("user_type", None)
+#         flash("Logout successful", "info")
+#     return redirect(url_for('login'))
 
 
 @app.route('/chart', methods=["POST", "GET"])
 def chart():
-    if "user_type" in session:
-        if session["user_type"] == "admin":
-            admin = True
-        elif session["user_type"] == "user":
-            admin = False
-    else:
-        flash("please login", "alert")
-        return redirect(url_for('login'))
+    admin="admin"
+    # if "user_type" in session:
+    #     if session["user_type"] == "admin":
+    #         admin = True
+    #     elif session["user_type"] == "user":
+    #         admin = False
+    # else:
+    #     flash("please login", "alert")
+    #     return redirect(url_for('login'))
     date_temp = datetime.datetime.now()
     if request.method == "POST":
         v = request.form["date"]
