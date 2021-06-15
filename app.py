@@ -75,27 +75,17 @@ def random_data():
 
 @app.route('/chart', methods=["POST", "GET"])
 def chart():
-    admin="admin"
-    # if "user_type" in session:
-    #     if session["user_type"] == "admin":
-    #         admin = True
-    #     elif session["user_type"] == "user":
-    #         admin = False
-    # else:
-    #     flash("please login", "alert")
-    #     return redirect(url_for('login'))
-    date_temp = datetime.datetime.now()
+    date_temp = datetime.date.today()
     if request.method == "POST":
         v = request.form["date"]
         z = v.split("/")
-        y = datetime.datetime(int(z[2]), int(z[0]), int(z[1]))
-        y = y.strftime("%j")
-        if date_temp.strftime("%j") == y:
+        y = datetime.date(int(z[2]), int(z[0]), int(z[1]))
+        if date_temp == y:
             return redirect(url_for('chart'))
         file_data=random_data()
         f = -1
         file_data = json.dumps(file_data)
-        return render_template('chart.html', file=file_data, status=f, min_date=365, date=v, admin=admin)
+        return render_template('chart.html', file=file_data, status=f, date=v, admin="admin")
     else:
         file_data = random_data()
         f = {}
@@ -106,31 +96,7 @@ def chart():
         file_data = json.dumps(file_data)
         f = json.dumps(f)
         v = date_temp.strftime("%m") + "/" + date_temp.strftime("%d") + "/" + date_temp.strftime("%Y")
-        return render_template('chart.html', file=file_data, status=f, min_date=365, date=v, admin=admin)
-
-
-def add_exit(tag, file_data):
-    tag = str(tag)
-    usr = "user_" + tag
-    temp = datetime.datetime.now()
-    exit_time = {"hr": temp.strftime("%H"), "min": temp.strftime("%M")}
-    data = {"exit_time": exit_time}
-    length = len(file_data[usr])
-    length = length - 1
-    file_data[usr][length].update(data)
-    return file_data
-
-
-def add_exit1(tag, file_data):
-    tag = str(tag)
-    usr = "user_" + tag
-    exit_time = {"hr": 24, "min": 59}
-    data = {"exit_time": exit_time}
-    length = len(file_data[usr])
-    length = length - 1
-    file_data[usr][length].update(data)
-    return file_data
-
+        return render_template('chart.html', file=file_data, status=f, date=v, admin="admin")
 
 if __name__ == "__main__":
     app.run(debug=debug)

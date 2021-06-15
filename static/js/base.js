@@ -8,7 +8,7 @@ $( function() {
    showAnim: "slideDown",
    changeMonth: true,
    changeYear: true,
-   minDate: -min_date,
+   minDate: -365,
    maxDate: 0
  } );
  

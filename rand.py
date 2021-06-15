@@ -39,3 +39,26 @@ for i in range(4):
 print(file_data)
 coll.delete_one({"_id":int(day)})
 coll.insert_one(file_data) 
+   def add_exit(tag, file_data):
+    tag = str(tag)
+    usr = "user_" + tag
+    temp = datetime.datetime.now()
+    exit_time = {"hr": temp.strftime("%H"), "min": temp.strftime("%M")}
+    data = {"exit_time": exit_time}
+    length = len(file_data[usr])
+    length = length - 1
+    file_data[usr][length].update(data)
+    return file_data
+
+
+def add_exit1(tag, file_data):
+    tag = str(tag)
+    usr = "user_" + tag
+    exit_time = {"hr": 24, "min": 59}
+    data = {"exit_time": exit_time}
+    length = len(file_data[usr])
+    length = length - 1
+    file_data[usr][length].update(data)
+    return file_data
+
+   

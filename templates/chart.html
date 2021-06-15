@@ -7,9 +7,7 @@
   <script type="text/javascript">
    var file_data1 = {{file|tojson}};
    var stat = {{status|tojson}};
-   var admin = {{admin|tojson}};
    var date = {{date|tojson}};
-   var min_date= {{min_date|tojson}};
  </script>
  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -66,15 +64,7 @@
   {%endfor%}
   {% endif %}
   {% endwith %}
- -->
- <div class="info">(Data displayed on this page is randomly generated)<a href="https://www.github.com/Adith625/heroku-live-demo/">View source</a>
-    <span class="closebtn" onclick="var alert=this.parentElement;alert.style.opacity='0';
-    setTimeout(function(){ alert.style.display ='none'; }, 600);">&times;</span>
-  </div>
- <div class="info">Visit my <a href="https://www.github.com/Adith625/">github profile</a>
-    <span class="closebtn" onclick="var alert=this.parentElement;alert.style.opacity='0';
-    setTimeout(function(){ alert.style.display ='none'; }, 600);">&times;</span>
-  </div>
+-->
 
-  </body>
+</body>
 </html>
