@@ -4,15 +4,14 @@ function drawChart() {
   var container = document.getElementById('timeline');
   var chart = new google.visualization.Timeline(container);
   var dataTable = new google.visualization.DataTable();
-
+  var d = new Date();
   dataTable.addColumn({ type: 'string', id: 'user' });
   dataTable.addColumn({ type: 'string', id: 'shift'});
   dataTable.addColumn({ type: 'date', id: 'enter_time' });
   dataTable.addColumn({ type: 'date', id: 'exit_time' });
   dataTable.addRow([ date,' ㅤ', new Date(0,0,0,0,0), new Date(0,0,0,0,0) ]);
   dataTable.addRow([ date,'ㅤ ', new Date(0,0,0,24,0), new Date(0,0,0,24,0) ]);
-  dataTable.addRow([ date,' ㅤㅤ', new Date(0,0,0,8,0), new Date(0,0,0,8,0) ]);
-  dataTable.addRow([ date,'ㅤㅤ ', new Date(0,0,0,16,0), new Date(0,0,0,16,0) ]);
+  dataTable.addRow([ date,'ㅤㅤ', new Date(0,0,0,d.getHours(),d.getMinutes()), new Date(0,0,0,d.getHours(),d.getMinutes()) ]);
   var usr = "";
   var enter_hr;
   var enter_min;
@@ -54,8 +53,7 @@ function drawChart() {
     if(x == 0 && y == 0) {height = parseFloat($(this).attr('height'))}
   })
 
-  $('#' + div + ' text:contains("ㅤㅤ ")').prev().first().attr('height', height + 'px').attr('width', '1px').attr('y', '0');
-  $('#' + div + ' text:contains(" ㅤㅤ")').prev().first().attr('height', height + 'px').attr('width', '1px').attr('y', '0');
+  $('#' + div + ' text:contains("ㅤㅤ")').prev().first().attr('height', height + 'px').attr('width', '1px').attr('y', '0');
   $('#' + div + ' text:contains("ㅤ ")').prev().first().attr('height', height + 'px').attr('width', '1px').attr('y', '0');
   $('#' + div + ' text:contains(" ㅤ")').prev().first().attr('height', height + 'px').attr('width', '1px').attr('y', '0');
 }
