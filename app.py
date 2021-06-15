@@ -39,30 +39,30 @@ def home():
 
 def random_data():
  file_data={"_id":int(date.strftime("%j")),"user_0":[],"user_1":[],"user_2":[],"user_3":[]}
- for i in range(4):
-  usr="user_"+str(i)
-  val=random.randint(0,4)
+ for usr_id in range(4):
+  usr="user_"+str(usr_id)
+  parts=random.randint(1,6)
+  part=23//parts
   num=0
-  for a in range(val):
-    num=num+val
+  for a in range(parts):
     if a == 0:
-     hr=random.randint(0,val)
+     hr=random.randint(0,part)
      min=random.randint(0,59)
     else:
-     hr=random.randint(num,num+val)
-     if(hr==file_data[usr][a-1]["exit_time"]["hr"]):
-       min=random.randint(int(file_data[usr][a-1]["exit_time"]["min"]),59)
-     else:
-       min=random.randint(0,59)
+        num=num+part
+        hr=random.randint(num,num+part)
+        if(hr==int(file_data[usr][a-1]["exit_time"]["hr"])):
+            min=random.randint(int(file_data[usr][a-1]["exit_time"]["min"]),59)
+        else:
+            min=random.randint(0,59)
     enter_time = {"hr":str(hr),"min":str(min)}
-    num=num+val
-    hr=random.randint(int(enter_time["hr"]),num)
+    # num=num+part
+    hr=random.randint(int(enter_time["hr"]),num+part)
     if (hr==int(enter_time["hr"])):
      min=random.randint(int(enter_time["min"]),59)
     else:
      min=random.randint(0,59)
     exit_time = {"hr":str(hr),"min":str(min)}
-    data = {"enter_time":enter_time,"exit_time":exit_time}
     file_data[usr].append({"enter_time":enter_time,"exit_time":exit_time})
  return file_data
 # @app.route("/logout")
